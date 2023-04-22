@@ -29,12 +29,7 @@ func transcribeFile(c *openai.Client, ctx context.Context, audioFile string, wg 
 	*transcriptions = append(*transcriptions, resp.Text)
 }
 
-func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("error loading .env file:", err)
-	}
-	c := openai.NewClient(os.Getenv("OPENAI_KEY"))
-	ctx := context.Background()
+func whisper(c *openai.Client, ctx context.Context) {
 
 	// Define the audio files directory and the audio format
 	audioDir := "audios/"
@@ -69,4 +64,14 @@ func main() {
 	for i, transcription := range transcriptions {
 		fmt.Printf("Transcription %d: %s\n", i+1, transcription)
 	}
+
+}
+
+func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("error loading .env file:", err)
+	}
+	c := openai.NewClient(os.Getenv("OPENAI_KEY"))
+
+	whisper(c, context.Background())
 }
